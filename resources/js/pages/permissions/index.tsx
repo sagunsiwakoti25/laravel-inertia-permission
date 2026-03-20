@@ -36,6 +36,7 @@ export default function Permissions({permissions}: {permissions: Permission}) {
     useEffect(() => {
         if(flash.message) {
             setOpenAddPermissionDialog(false);
+            setOpenEditPermissionDialog(false);
             toast.success(flash.message);
         }
     }, [flash.message]);
