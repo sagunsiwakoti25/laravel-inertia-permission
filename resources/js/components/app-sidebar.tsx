@@ -26,6 +26,11 @@ const mainNavItems: NavItem[] = [
         title: 'Permissions',
         href: '/permissions',
         icon: Lock,
+    },
+    {
+        title: 'Roles',
+        href: '/roles',
+        icon: LockKeyhole,
     }
 ];
 
