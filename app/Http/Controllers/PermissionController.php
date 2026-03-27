@@ -27,7 +27,7 @@ class PermissionController extends Controller
     //store method
     public function store(Request $request)
     {
-       Permission::create($request->validate([
+        Permission::create($request->validate([
             'name' => ['required', 'string', 'max:255', 'unique:permissions,name'],
         ]));
 

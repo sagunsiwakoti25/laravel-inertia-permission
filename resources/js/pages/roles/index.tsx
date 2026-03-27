@@ -1,4 +1,4 @@
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
@@ -18,6 +18,7 @@ import { update } from '@/actions/App/Http/Controllers/Settings/PasswordControll
 import TablePagination from '@/components/table-pagination';
 import permissions from '../permissions';
 import { permission } from 'process';
+import { Badge } from '@/components/ui/badge';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -28,22 +29,22 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Roles({roles}: {roles: Role}) {
 
-    const {flash} = usePage<{flash: {message?: string}}>().props;
+    
+    const page = usePage<{flash: {message?: string}}>();
+    const {flash} = page.props;
 
-    useEffect(() => {
-        if(flash.message) {
-            toast.success(flash.message);
+     useEffect(() => {
+        if (!flash.message) {
+            return;
         }
-    }, [flash.message]);
+        toast.success(flash.message, {
+            id: `roles-flash-${page.url}-${flash.message}`,
+        });
+    }, [page.url, flash.message]);
 
     function deleteRole(id: number) {
         if (confirm('Are you sure you want to delete this role?')) {
-            // router.delete(`/roles/${id}`, {
-            //     onSuccess: () => {
-            //         toast.success('Role deleted successfully');
-            //     },
-            // });
-            alert('Delete functionality is not implemented yet');
+            router.delete(`/roles/${id}`);
         }
     }
  
@@ -78,7 +79,17 @@ export default function Roles({roles}: {roles: Role}) {
                                     <TableRow key={role.id} className='odd:bg-slate-100 dark:odd:bg-slate-800'>
                                         <TableCell>{index+1}</TableCell>
                                         <TableCell>{role.name}</TableCell>
-                                        <TableCell>{role.permissions.join(', ')}</TableCell>
+                                        <TableCell className='flex flex-wrap items-center gap-2'>
+                                            {role.permissions.map((perm, permIndex) => (
+                                                <Badge
+                                                    key={`role-${role.id}-perm-${permIndex}-${perm}`}
+                                                    variant={'outline'}
+                                                    className='mr-1 mb-1'
+                                                >
+                                                    {perm}
+                                                </Badge>
+                                            ))}
+                                        </TableCell>
                                         <TableCell>{role.created_at}</TableCell>
                                         <TableCell>
                                             <Link href={`/roles/${role.id}/edit`}>

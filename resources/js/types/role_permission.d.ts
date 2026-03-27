@@ -20,3 +20,10 @@ export interface Permission extends Pagination{
 export interface Role extends Pagination{
     data: singleRole[];
 }
+
+export interface RolePermission {
+    id: number;
+    name: string;
+    permissions: singlePermission[];
+    created_at: string;
+}
